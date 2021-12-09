@@ -4,6 +4,14 @@ const attribution = new ol.control.Attribution({
 
 var map = new ol.Map({
     target: 'map',
+    layers: [new ol.layer.Tile({
+        source: new ol.source.OSM()
+    })],
+    view: new ol.View({
+        center: ol.proj.fromLonLat([-119.644, 34.5158]),
+        zoom: 15,
+        maxZoom: 20
+    }),
     controls: ol.control.defaults({
         attribution: false
     }).extend([attribution])
