@@ -3,7 +3,7 @@ var datos = [];
 let JSON = [];
 
 const userAction = async () => {
-   const response = await fetch('http://127.0.0.1:5502/src/api/servers.json');
+   const response = await fetch('http://127.0.0.1:5500/src/api/servers.json');
    data = await response.json();
    JSON = await data;
    select = document.getElementById('selecetMapaBase');
