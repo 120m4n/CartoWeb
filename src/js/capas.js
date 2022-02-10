@@ -206,7 +206,7 @@ let style_interruptor_2 = new ol.style.Style({
 
 let source_Apoyos = new ol.source.VectorTile({
     format: new ol.format.MVT(),
-    url: 'http://198.58.115.96:8080/maps/essa/apoyosprint/{z}/{x}/{y}.pbf',
+    url: 'http://192.168.0.31:8880/maps/essa/apoyos/{z}/{x}/{y}.pbf',
 });
 
 
@@ -214,7 +214,7 @@ var typeCache = {};
 const Estilos_Energis = (feature) => {
     let array = [];
 
-    if (feature.get('ap') != undefined) {
+    if (feature.get('cantidadap') >0) {
         array.push(style_ap);
         array.push(style_ap_linea);
         array.push(style_ap_linea_i);
@@ -222,10 +222,10 @@ const Estilos_Energis = (feature) => {
         array.push(style_ap_linea_a);
     }
 
-    if (feature.get('tipoapoyo').includes('M')) {
+    if (feature.get('codigotipoapoyo').includes('M')) {
         array.push(style_media);
     }
-    else if (feature.get('tipoapoyo').includes('B')) {
+    else if (feature.get('codigotipoapoyo').includes('B')) {
         array.push(style_baja);
     }
     else {
@@ -233,15 +233,7 @@ const Estilos_Energis = (feature) => {
         array.push(style_baja);
     }
 
-    if (feature.get('trafo') != 'X') {
-        array.push(style_trafo);
-    }
-
-    if (feature.get('interrup') != 'X') {
-        array.push(style_interruptor);
-        array.push(style_interruptor_2);
-    }
-
+   
 
     return array;
 };
