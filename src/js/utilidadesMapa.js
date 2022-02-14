@@ -50,18 +50,24 @@ function BuscarApoyoCartografia() {
           if ((lat > 0 && lat < 13) && (lon < -66 && lon > -79)) {
               UbicarEnMapa(lat, lon);
           } else {
-            Swal.fire({
-              icon: 'warning',
-              title: 'Fuera de rango',
-              text: 'Las coordenadas que intenta ingresar estan fuera de Colombia, por lo tanto no es posible ubicarlas.'
-            });
-          }
+            Swal.showValidationMessage(
+               'Las coordenadas que intenta ingresar estan fuera de Colombia, por lo tanto no es posible ubicarlas.'
+             );
+         
+         }
  
         } else {
           let x = document.getElementById('swal-input3').value;
           let y = document.getElementById('swal-input4').value;
+          try{
           UbicarEnMapaXY(x, y);
-        }
+          }
+          catch (error){
+            Swal.showValidationMessage(
+               `${error}`
+             )
+          }
+         }
 
       }
     });
@@ -79,7 +85,8 @@ function UbicarEnMapa(lat, lon) {
 
 
 function UbicarEnMapaXY(x, y) {
-  proj4.defs("EPSG:3116","+proj=tmerc +lat_0=4.596200416666666 +lon_0=-74.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
+
+   proj4.defs("EPSG:3116","+proj=tmerc +lat_0=4.596200416666666 +lon_0=-74.07750791666666 +k=1 +x_0=1000000 +y_0=1000000 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
   ol.proj.proj4.register(proj4);
 
   let MagnaSirgas = ol.proj.get('EPSG:3116');
@@ -88,11 +95,14 @@ function UbicarEnMapaXY(x, y) {
   let x_c = parseFloat(x);
   let y_c = parseFloat(y);
 
-  
-  
-  let lugar2 = ol.proj.fromLonLat(ol.proj.transform([x_c,y_c], MagnaSirgas, 'EPSG:4326'));
-  map.getView().setCenter(lugar2);
-  // map.getView().setZoom(16);
+  let lugar2 = ol.proj.transform([x_c,y_c], MagnaSirgas, 'EPSG:4326');
+  if ((lugar2[1] > 0 && lugar2[1] < 13) && (lugar2[0] < -66 && lugar2[0] > -79)) {
+   let r = ol.proj.fromLonLat(lugar2);
+   map.getView().setCenter(r);
+}else
+{
+   throw new Error('Las coordenadas que intenta ingresar estan fuera de Colombia, por lo tanto no es posible ubicarlas.') ;
+}
 
   pulse(ol.proj.transform([x_c,y_c], MagnaSirgas, 'EPSG:4326'))
 
